@@ -23,6 +23,7 @@ public class Job {
     @Column(nullable = false)
     private String title;
 
+    @Column(length = 1000)
     private String location;
 
     @Column(nullable = false)
