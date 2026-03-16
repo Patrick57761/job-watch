@@ -1,5 +1,7 @@
 package com.jobwatch.apiservice.services;
 
+import com.jobwatch.apiservice.dto.AuthResponseDTO;
+import com.jobwatch.apiservice.dto.DtoMapper;
 import com.jobwatch.apiservice.models.User;
 import com.jobwatch.apiservice.repositories.UserRepository;
 import com.jobwatch.apiservice.security.JwtUtil;
@@ -21,36 +23,31 @@ public class AuthService {
         this.jwtUtil = jwtUtil;
     }
 
-    public String register(String email, String password) {
-        // Check if email already exists
+    public AuthResponseDTO register(String email, String password) {
         if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already registered");
         }
 
-        // Hash the password — never store plain text
         String hashedPassword = passwordEncoder.encode(password);
 
-        // Create and save the user
         User user = new User();
         user.setEmail(email);
         user.setPassword(hashedPassword);
         userRepository.save(user);
 
-        // Return a JWT token
-        return jwtUtil.generateToken(email);
+        String token = jwtUtil.generateToken(email);
+        return new AuthResponseDTO(token, DtoMapper.toUserDTO(user));
     }
 
-    public String login(String email, String password) {
-        // Find user by email
+    public AuthResponseDTO login(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Invalid email or password"));
 
-        // Check password matches
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid email or password");
         }
 
-        // Return a JWT token
-        return jwtUtil.generateToken(email);
+        String token = jwtUtil.generateToken(email);
+        return new AuthResponseDTO(token, DtoMapper.toUserDTO(user));
     }
 }
