@@ -1,12 +1,16 @@
 import time
 import logging
+import os
+from dotenv import load_dotenv
 from adapters.greenhouse import fetch_jobs
 from redis_client import is_new_job
 from kafka_client import publish_job
 
+load_dotenv()
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
-POLL_INTERVAL_SECONDS = 60
+POLL_INTERVAL_SECONDS = int(os.getenv("POLL_INTERVAL_SECONDS", 60))
 
 COMPANIES = [
     {"slug": "stripe", "platform": "greenhouse"},
