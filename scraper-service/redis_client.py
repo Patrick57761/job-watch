@@ -1,0 +1,14 @@
+import redis
+import os
+from dotenv import load_dotenv                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                            
+load_dotenv()   
+
+client = redis.Redis(
+    host=os.getenv("REDIS_HOST", "localhost"),
+    port=int(os.getenv("REDIS_PORT", 6379)),
+    decode_responses=True
+)
+
+def is_new_job(job_id: str) -> bool:
+    return client.set(job_id, 1, nx=True, ex=86400)
