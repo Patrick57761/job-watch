@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { fetchJobs, type Job } from "@/lib/api";
+import { fetchJobs, subscribeToPush, type Job } from "@/lib/api";
 
 // Maps a platform string to a short badge label and color
 const PLATFORM_STYLES: Record<string, { label: string; classes: string }> = {
@@ -64,6 +64,7 @@ export default function JobsPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [notifStatus, setNotifStatus] = useState<"idle" | "loading" | "granted" | "denied">("idle");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -92,6 +93,31 @@ export default function JobsPage() {
     router.replace("/");
   }
 
+  async function handleEnableNotifications() {
+    if (!("Notification" in window) || !("serviceWorker" in navigator)) {
+      alert("Push notifications are not supported in this browser.");
+      return;
+    }
+    setNotifStatus("loading");
+    const permission = await Notification.requestPermission();
+    if (permission !== "granted") {
+      setNotifStatus("denied");
+      return;
+    }
+    try {
+      const reg = await navigator.serviceWorker.register("/sw.js");
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: "BIp3kUetAw4oPNGzTPGE3Cm-q706uOKf23Kvf-ZV8n_47pbHKu9VXjOMr4O0n1IGZkIolJG6HczKBLqWqVA6rqc",
+      });
+      await subscribeToPush(sub.toJSON() as PushSubscriptionJSON);
+      setNotifStatus("granted");
+    } catch (err) {
+      console.error(err);
+      setNotifStatus("idle");
+    }
+  }
+
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -105,6 +131,17 @@ export default function JobsPage() {
             >
               Manage Watchlist
             </Link>
+            {notifStatus === "granted" ? (
+              <span className="text-sm text-green-600 font-medium">Notifications on</span>
+            ) : (
+              <button
+                onClick={handleEnableNotifications}
+                disabled={notifStatus === "loading" || notifStatus === "denied"}
+                className="text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50"
+              >
+                {notifStatus === "loading" ? "Enabling…" : notifStatus === "denied" ? "Blocked" : "Enable Notifications"}
+              </button>
+            )}
             <button
               onClick={handleLogout}
               className="text-sm text-gray-500 hover:text-gray-700"

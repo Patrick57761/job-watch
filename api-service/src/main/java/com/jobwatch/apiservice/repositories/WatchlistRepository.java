@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface WatchlistRepository extends JpaRepository<Watchlist, Long> {
     List<Watchlist> findByUser(User user);
+    List<Watchlist> findByCompany(Company company);
     Optional<Watchlist> findByUserAndCompany(User user, Company company);
     boolean existsByUserAndCompany(User user, Company company);
 }

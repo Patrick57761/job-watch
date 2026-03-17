@@ -125,3 +125,22 @@ export async function searchCompanies(query: string): Promise<Company[]> {
   );
   return handleResponse(res);
 }
+
+// ─── Push Notifications ───────────────────────────────────────────────────────
+
+export async function subscribeToPush(subscription: PushSubscriptionJSON): Promise<void> {
+  const keys = subscription.keys as { p256dh: string; auth: string };
+  const res = await fetch(`${BASE_URL}/api/push/subscribe`, {
+    method: "POST",
+    headers: authHeaders(),
+    body: JSON.stringify({
+      endpoint: subscription.endpoint,
+      p256dh: keys.p256dh,
+      auth: keys.auth,
+    }),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || `HTTP ${res.status}`);
+  }
+}
