@@ -162,7 +162,7 @@ export default function WatchlistPage() {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search by company name…"
+            placeholder="Search by company slug (e.g. stripe, figma, notion)…"
             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3"
           />
 
@@ -202,7 +202,9 @@ export default function WatchlistPage() {
           )}
 
           {!searchLoading && query.trim() && searchResults.length === 0 && (
-            <p className="text-sm text-gray-400 px-1">No companies found.</p>
+            <p className="text-sm text-gray-400 px-1">
+              Not supported — try a different slug (e.g. &quot;figma&quot; not &quot;Figma Inc&quot;).
+            </p>
           )}
         </section>
 

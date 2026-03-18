@@ -8,6 +8,7 @@ import com.jobwatch.apiservice.repositories.UserRepository;
 import com.jobwatch.apiservice.repositories.WatchlistRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class WatchlistService {
@@ -15,13 +16,16 @@ public class WatchlistService {
     private final WatchlistRepository watchlistRepository;
     private final CompanyRepository companyRepository;
     private final UserRepository userRepository;
+    private final CompanyDiscoveryService companyDiscoveryService;
 
     public WatchlistService(WatchlistRepository watchlistRepository,
                             CompanyRepository companyRepository,
-                            UserRepository userRepository) {
+                            UserRepository userRepository,
+                            CompanyDiscoveryService companyDiscoveryService) {
         this.watchlistRepository = watchlistRepository;
         this.companyRepository = companyRepository;
         this.userRepository = userRepository;
+        this.companyDiscoveryService = companyDiscoveryService;
     }
 
     // Get all companies in watchlist
@@ -63,8 +67,14 @@ public class WatchlistService {
         watchlistRepository.delete(watchlist);
     }
 
-    // Search companies by name
+    // Search companies by name, falling back to ATS discovery if nothing found in DB
     public List<Company> searchCompanies(String query) {
-        return companyRepository.findByNameContainingIgnoreCase(query);
+        List<Company> results = companyRepository.findByNameContainingIgnoreCase(query);
+        if (!results.isEmpty()) return results;
+
+        // Nothing in DB — try to discover the company by treating the query as a slug
+        String slug = query.toLowerCase().trim();
+        Optional<Company> discovered = companyDiscoveryService.discover(slug);
+        return discovered.map(List::of).orElse(List.of());
     }
 }
