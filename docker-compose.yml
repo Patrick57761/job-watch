@@ -4,10 +4,27 @@ services:
     ports:
       - "6379:6379"
 
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: jobwatch
+      POSTGRES_USER: jobwatch
+      POSTGRES_PASSWORD: jobwatch
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
   api-service:
     build: ./api-service
     ports:
       - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/jobwatch
+      SPRING_DATASOURCE_USERNAME: jobwatch
+      SPRING_DATASOURCE_PASSWORD: jobwatch
 
   notification-service:
     build: ./notification-service
@@ -40,3 +57,6 @@ services:
       - "3000:3000"
     depends_on:
       - api-service
+
+volumes:
+  postgres_data:
