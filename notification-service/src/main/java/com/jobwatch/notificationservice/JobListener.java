@@ -16,10 +16,12 @@ public class JobListener {
     @PostMapping("/notify")
     public ResponseEntity<?> onNewJob(@RequestBody NotifyRequest request) {
         if (request.companySlug() != null) {
-            pushNotificationService.notifySubscribersForCompany(request.companySlug());
+            pushNotificationService.notifySubscribersForCompany(
+                request.companySlug(), request.companyName(), request.companyLogo(), request.jobTitle()
+            );
         }
         return ResponseEntity.ok().build();
     }
 
-    record NotifyRequest(String companySlug) {}
+    record NotifyRequest(String companySlug, String companyName, String companyLogo, String jobTitle) {}
 }

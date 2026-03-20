@@ -27,11 +27,18 @@ public class PushNotificationService {
         this.restTemplate = new RestTemplate();
     }
 
-    public void notifySubscribersForCompany(String companySlug) {
+    public void notifySubscribersForCompany(String companySlug, String companyName, String companyLogo, String jobTitle) {
         String url = apiBaseUrl + "/api/push/internal/subscriptions?companySlug=" + companySlug;
 
         List<Map> subscriptions = restTemplate.getForObject(url, List.class);
         if (subscriptions == null || subscriptions.isEmpty()) return;
+
+        String payload = String.format(
+            "{\"title\":\"%s\",\"body\":\"%s\",\"icon\":\"%s\"}",
+            companyName != null ? companyName : companySlug,
+            jobTitle != null ? jobTitle : "New job posted",
+            companyLogo != null ? companyLogo : ""
+        );
 
         for (Map sub : subscriptions) {
             try {
@@ -41,10 +48,11 @@ public class PushNotificationService {
 
                 Subscription subscription = new Subscription(endpoint,
                         new Subscription.Keys(p256dh, auth));
-                Notification notification = new Notification(subscription, "{}");
+                Notification notification = new Notification(subscription, payload);
                 pushService.send(notification);
             } catch (Exception e) {
-                System.err.println("Failed to send push to subscription: " + e.getMessage());
+                System.err.println("Failed to send push to subscription: " + e.getClass().getName() + ": " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }

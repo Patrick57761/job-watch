@@ -7,24 +7,22 @@ import { fetchJobs, subscribeToPush, type Job } from "@/lib/api";
 
 function JobCard({ job }: { job: Job }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl px-5 py-4 hover:border-gray-300 transition-colors">
+    <a
+      href={job.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block bg-white border border-gray-200 rounded-xl px-5 py-4 hover:border-gray-300 hover:shadow-sm transition-all"
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <a
-            href={job.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-semibold text-gray-900 hover:text-blue-600 leading-snug line-clamp-2 transition-colors"
-          >
-            {job.title}
-          </a>
+          <p className="font-semibold text-gray-900 leading-snug line-clamp-2">{job.title}</p>
           {job.location && (
             <p className="text-xs text-gray-400 mt-1 truncate">{job.location}</p>
           )}
         </div>
         <p className="shrink-0 text-sm text-gray-500 whitespace-nowrap">{job.company.name}</p>
       </div>
-    </div>
+    </a>
   );
 }
 

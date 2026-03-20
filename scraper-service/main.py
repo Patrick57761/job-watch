@@ -50,11 +50,16 @@ def ingest_job(job: dict):
     except Exception as e:
         logging.error(f"Failed to ingest job {job['id']}: {e}")
 
-def notify_new_job(company_slug: str):
+def notify_new_job(company_slug: str, company_name: str, company_logo: str, job_title: str):
     try:
         requests.post(
             f"{NOTIFICATION_SERVICE_URL}/internal/notify",
-            json={"companySlug": company_slug},
+            json={
+                "companySlug": company_slug,
+                "companyName": company_name,
+                "companyLogo": company_logo,
+                "jobTitle": job_title,
+            },
             timeout=5
         )
     except Exception as e:
@@ -64,6 +69,8 @@ def scrape_all():
     for company in fetch_companies():
         slug = company["slug"]
         platform = company["platform"]
+        company_name = company.get("name", slug)
+        company_logo = company.get("logoUrl", "")
         fetch_jobs = ADAPTERS[platform]
         logging.info(f"Scraping {slug} ({platform})...")
         try:
@@ -72,7 +79,7 @@ def scrape_all():
             for job in jobs:
                 if is_new_job(job["id"]):
                     ingest_job(job)
-                    notify_new_job(slug)
+                    notify_new_job(slug, company_name, company_logo, job["title"])
                     new_count += 1
             logging.info(f"{slug}: {new_count} new jobs published out of {len(jobs)} total")
         except Exception as e:
