@@ -1,5 +1,6 @@
 package com.jobwatch.notificationservice;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.martijndwars.webpush.Notification;
 import nl.martijndwars.webpush.PushService;
 import nl.martijndwars.webpush.Subscription;
@@ -33,12 +34,16 @@ public class PushNotificationService {
         List<Map> subscriptions = restTemplate.getForObject(url, List.class);
         if (subscriptions == null || subscriptions.isEmpty()) return;
 
-        String payload = String.format(
-            "{\"title\":\"%s\",\"body\":\"%s\",\"icon\":\"%s\"}",
-            companyName != null ? companyName : companySlug,
-            jobTitle != null ? jobTitle : "New job posted",
-            companyLogo != null ? companyLogo : ""
-        );
+        String payload;
+        try {
+            payload = new ObjectMapper().writeValueAsString(Map.of(
+                "title", companyName != null ? companyName : companySlug,
+                "body", jobTitle != null ? jobTitle : "New job posted",
+                "icon", companyLogo != null ? companyLogo : ""
+            ));
+        } catch (Exception e) {
+            payload = "{\"title\":\"JobWatch\",\"body\":\"New job posted\",\"icon\":\"\"}";
+        }
 
         for (Map sub : subscriptions) {
             try {
