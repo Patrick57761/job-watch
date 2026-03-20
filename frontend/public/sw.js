@@ -2,23 +2,22 @@ self.addEventListener("push", (event) => {
   let title = "JobWatch";
   let body = "A new job was posted.";
   let icon = "/icon.png";
+  let url = "/jobs";
 
   try {
-    console.log("[sw] raw push data:", event.data.text());
     const data = event.data.json();
     title = data.title || title;
     body = data.body || body;
     icon = data.icon || icon;
-  } catch (e) {
-    console.error("[sw] failed to parse push payload:", e);
-  }
+    url = data.url || url;
+  } catch (e) {}
 
   event.waitUntil(
-    self.registration.showNotification(title, { body, icon })
+    self.registration.showNotification(title, { body, icon, data: { url } })
   );
 });
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  event.waitUntil(clients.openWindow("/jobs"));
+  event.waitUntil(clients.openWindow(event.notification.data.url));
 });

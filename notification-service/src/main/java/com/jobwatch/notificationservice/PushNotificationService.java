@@ -28,7 +28,7 @@ public class PushNotificationService {
         this.restTemplate = new RestTemplate();
     }
 
-    public void notifySubscribersForCompany(String companySlug, String companyName, String companyLogo, String jobTitle) {
+    public void notifySubscribersForCompany(String companySlug, String companyName, String companyLogo, String jobTitle, String jobUrl) {
         String url = apiBaseUrl + "/api/push/internal/subscriptions?companySlug=" + companySlug;
 
         List<Map> subscriptions = restTemplate.getForObject(url, List.class);
@@ -39,7 +39,8 @@ public class PushNotificationService {
             payload = new ObjectMapper().writeValueAsString(Map.of(
                 "title", companyName != null ? companyName : companySlug,
                 "body", jobTitle != null ? jobTitle : "New job posted",
-                "icon", companyLogo != null ? companyLogo : ""
+                "icon", companyLogo != null ? companyLogo : "",
+                "url", jobUrl != null ? jobUrl : ""
             ));
         } catch (Exception e) {
             payload = "{\"title\":\"JobWatch\",\"body\":\"New job posted\",\"icon\":\"\"}";

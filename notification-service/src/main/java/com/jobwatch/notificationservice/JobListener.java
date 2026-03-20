@@ -17,11 +17,11 @@ public class JobListener {
     public ResponseEntity<?> onNewJob(@RequestBody NotifyRequest request) {
         if (request.companySlug() != null) {
             pushNotificationService.notifySubscribersForCompany(
-                request.companySlug(), request.companyName(), request.companyLogo(), request.jobTitle()
+                request.companySlug(), request.companyName(), request.companyLogo(), request.jobTitle(), request.jobUrl()
             );
         }
         return ResponseEntity.ok().build();
     }
 
-    record NotifyRequest(String companySlug, String companyName, String companyLogo, String jobTitle) {}
+    record NotifyRequest(String companySlug, String companyName, String companyLogo, String jobTitle, String jobUrl) {}
 }
