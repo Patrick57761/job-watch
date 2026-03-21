@@ -5,6 +5,18 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { fetchJobs, subscribeToPush, type Job } from "@/lib/api";
 
+function timeAgo(dateStr: string): string {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const minutes = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  const days = Math.floor(diff / 86400000);
+  const months = Math.floor(days / 30);
+  if (minutes < 60) return `${minutes}m ago`;
+  if (hours < 24) return `${hours}h ago`;
+  if (days < 30) return `${days}d ago`;
+  return `${months}mo ago`;
+}
+
 function JobCard({ job }: { job: Job }) {
   return (
     <a
@@ -20,7 +32,10 @@ function JobCard({ job }: { job: Job }) {
             <p className="text-xs text-gray-400 mt-1 truncate">{job.location}</p>
           )}
         </div>
-        <p className="shrink-0 text-sm text-gray-500 whitespace-nowrap">{job.company.name}</p>
+        <div className="shrink-0 text-right">
+          <p className="text-sm text-gray-500 whitespace-nowrap">{job.company.name}</p>
+          <p className="text-xs text-gray-400 mt-0.5">{timeAgo(job.createdAt)}</p>
+        </div>
       </div>
     </a>
   );
