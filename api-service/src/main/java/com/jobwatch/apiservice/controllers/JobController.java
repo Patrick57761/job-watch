@@ -26,8 +26,12 @@ public class JobController {
     }
 
     @GetMapping("/api/jobs")
-    public ResponseEntity<List<Job>> getJobs(Authentication authentication) {
-        List<Job> jobs = jobService.getJobsForUser(authentication.getName());
+    public ResponseEntity<List<Job>> getJobs(
+            Authentication authentication,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String seniority,
+            @RequestParam(defaultValue = "false") boolean usOnly) {
+        List<Job> jobs = jobService.getJobsForUser(authentication.getName(), category, seniority, usOnly);
         return ResponseEntity.ok(jobs);
     }
 

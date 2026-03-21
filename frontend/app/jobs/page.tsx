@@ -32,6 +32,9 @@ export default function JobsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [notifStatus, setNotifStatus] = useState<"idle" | "loading" | "granted" | "denied">("idle");
+  const [category, setCategory] = useState("");
+  const [seniority, setSeniority] = useState("");
+  const [usOnly, setUsOnly] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -48,12 +51,17 @@ export default function JobsPage() {
         setNotifStatus("denied");
       }
     }
+  }, [router]);
 
-    fetchJobs()
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    setLoading(true);
+    setError("");
+    fetchJobs(category || undefined, seniority || undefined, usOnly || undefined)
       .then(setJobs)
       .catch((err: unknown) => {
         const msg = err instanceof Error ? err.message : "Failed to load jobs.";
-        // Treat auth errors as session expired
         if (msg.includes("401") || msg.includes("403")) {
           localStorage.removeItem("token");
           router.replace("/");
@@ -62,7 +70,7 @@ export default function JobsPage() {
         }
       })
       .finally(() => setLoading(false));
-  }, [router]);
+  }, [router, category, seniority, usOnly]);
 
   function handleLogout() {
     localStorage.removeItem("token");
@@ -147,6 +155,48 @@ export default function JobsPage() {
           </div>
         </div>
       </header>
+
+      {/* Filters */}
+      <div className="bg-white border-b border-gray-100">
+        <div className="max-w-2xl mx-auto px-4 py-3 flex gap-2 flex-wrap">
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-600 bg-white focus:outline-none focus:border-gray-400"
+          >
+            <option value="">All roles</option>
+            <option value="technical">Technical</option>
+            <option value="product">Product</option>
+            <option value="design">Design</option>
+            <option value="marketing">Marketing</option>
+            <option value="recruiting">Recruiting</option>
+            <option value="business">Business</option>
+            <option value="leadership">Leadership</option>
+            <option value="other">Other</option>
+          </select>
+          <select
+            value={seniority}
+            onChange={(e) => setSeniority(e.target.value)}
+            className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-600 bg-white focus:outline-none focus:border-gray-400"
+          >
+            <option value="">All levels</option>
+            <option value="intern">Intern</option>
+            <option value="early career">Early Career</option>
+            <option value="any">Mid-level</option>
+            <option value="experienced">Experienced</option>
+          </select>
+          <button
+            onClick={() => setUsOnly(!usOnly)}
+            className={`text-sm px-3 py-1.5 rounded-lg border transition-colors ${
+              usOnly
+                ? "bg-blue-600 text-white border-blue-600"
+                : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
+            }`}
+          >
+            🇺🇸 US only
+          </button>
+        </div>
+      </div>
 
       {/* Body */}
       <div className="max-w-2xl mx-auto px-4 py-8">

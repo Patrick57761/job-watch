@@ -39,6 +39,12 @@ public class Job {
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
+    @Column
+    private String category;
+
+    @Column
+    private String seniority;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

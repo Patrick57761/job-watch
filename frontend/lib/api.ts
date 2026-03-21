@@ -82,8 +82,13 @@ export async function login(
 
 // ─── Jobs ─────────────────────────────────────────────────────────────────────
 
-export async function fetchJobs(): Promise<Job[]> {
-  const res = await fetch(`${BASE_URL}/api/jobs`, {
+export async function fetchJobs(category?: string, seniority?: string, usOnly?: boolean): Promise<Job[]> {
+  const params = new URLSearchParams();
+  if (category) params.set("category", category);
+  if (seniority) params.set("seniority", seniority);
+  if (usOnly) params.set("usOnly", "true");
+  const query = params.toString() ? `?${params.toString()}` : "";
+  const res = await fetch(`${BASE_URL}/api/jobs${query}`, {
     headers: authHeaders(),
   });
   return handleResponse(res);

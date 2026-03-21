@@ -23,10 +23,10 @@ public class JobService {
         this.userRepository = userRepository;
     }
 
-    public List<Job> getJobsForUser(String email) {
+    public List<Job> getJobsForUser(String email, String category, String seniority, boolean usOnly) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        return jobRepository.findJobsForWatchlist(user);
+        return jobRepository.findJobsForWatchlistFiltered(user, category, seniority, usOnly);
     }
 
     public Job ingestJob(String externalId, String title, String location,
@@ -47,6 +47,8 @@ public class JobService {
         job.setUpdatedAt(updatedAt);
         job.setPlatform(platform);
         job.setCompany(company);
+        job.setCategory(JobClassifier.classifyCategory(title));
+        job.setSeniority(JobClassifier.classifySeniority(title));
 
         return jobRepository.save(job);
     }
