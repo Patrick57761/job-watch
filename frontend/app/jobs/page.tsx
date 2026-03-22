@@ -217,7 +217,7 @@ export default function JobsPage() {
             <option value="">All levels</option>
             <option value="intern">Intern</option>
             <option value="early career">Early Career</option>
-            <option value="any">Mid-level</option>
+            <option value="mid-level">Mid-level</option>
             <option value="experienced">Experienced</option>
           </select>
           <button

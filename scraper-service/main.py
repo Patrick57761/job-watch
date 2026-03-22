@@ -7,6 +7,7 @@ from adapters.greenhouse import fetch_jobs as greenhouse_fetch
 from adapters.lever import fetch_jobs as lever_fetch
 from adapters.ashby import fetch_jobs as ashby_fetch
 from redis_client import is_new_job
+from classifier import classify_job
 
 load_dotenv()
 
@@ -31,7 +32,7 @@ def fetch_companies():
         logging.error(f"Failed to fetch companies: {e}")
         return []
 
-def ingest_job(job: dict):
+def ingest_job(job: dict, category: str, seniority: str):
     try:
         response = requests.post(
             f"{API_BASE_URL}/internal/jobs",
@@ -43,6 +44,8 @@ def ingest_job(job: dict):
                 "updatedAt": job["updated_at"],
                 "platform": job["platform"],
                 "companySlug": job["company_slug"],
+                "category": category,
+                "seniority": seniority,
             },
             timeout=5
         )
@@ -79,7 +82,8 @@ def scrape_all():
             new_count = 0
             for job in jobs:
                 if is_new_job(job["id"]):
-                    ingest_job(job)
+                    classification = classify_job(job["title"])
+                    ingest_job(job, classification["category"], classification["seniority"])
                     notify_new_job(slug, company_name, company_logo, job["title"], job["url"])
                     new_count += 1
             logging.info(f"{slug}: {new_count} new jobs published out of {len(jobs)} total")
