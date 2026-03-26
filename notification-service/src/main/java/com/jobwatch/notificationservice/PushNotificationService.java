@@ -53,16 +53,16 @@ public class PushNotificationService {
         }
 
         for (Map sub : subscriptions) {
+            String userEmail = (String) sub.get("userEmail");
+            if (userEmail != null && !matchesPreferences(userEmail, jobCategory, jobSeniority)) {
+                continue;
+            }
+
+            String endpoint = (String) sub.get("endpoint");
+            String p256dh = (String) sub.get("p256dh");
+            String auth = (String) sub.get("auth");
+
             try {
-                String userEmail = (String) sub.get("userEmail");
-                if (userEmail != null && !matchesPreferences(userEmail, jobCategory, jobSeniority)) {
-                    continue;
-                }
-
-                String endpoint = (String) sub.get("endpoint");
-                String p256dh = (String) sub.get("p256dh");
-                String auth = (String) sub.get("auth");
-
                 Subscription subscription = new Subscription(endpoint,
                         new Subscription.Keys(p256dh, auth));
                 Notification notification = new Notification(subscription, payload);
