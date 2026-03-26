@@ -25,7 +25,7 @@ public class AuthService {
 
     public AuthResponseDTO register(String email, String password) {
         if (userRepository.existsByEmail(email)) {
-            throw new RuntimeException("Email already registered");
+            throw new RuntimeException("An account with that email already exists.");
         }
 
         String hashedPassword = passwordEncoder.encode(password);
@@ -41,10 +41,10 @@ public class AuthService {
 
     public AuthResponseDTO login(String email, String password) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+                .orElseThrow(() -> new RuntimeException("No account found with that email."));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("Invalid email or password");
+            throw new RuntimeException("Incorrect password.");
         }
 
         String token = jwtUtil.generateToken(email);

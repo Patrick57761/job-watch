@@ -29,4 +29,9 @@ public class AuthController {
         String password = request.get("password");
         return ResponseEntity.ok(authService.login(email, password));
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleAuthError(RuntimeException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
 }
