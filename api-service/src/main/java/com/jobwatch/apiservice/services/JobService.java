@@ -25,7 +25,7 @@ public class JobService {
     }
 
     public List<Job> getJobsForUser(String email, List<String> categories, List<String> seniorities, boolean usOnly) {
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByUsername(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return jobRepository.findJobsForWatchlistFiltered(user, categories, seniorities, usOnly);
     }

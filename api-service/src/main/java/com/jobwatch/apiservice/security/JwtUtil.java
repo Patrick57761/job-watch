@@ -23,16 +23,16 @@ public class JwtUtil {
     }
 
     // Generate a token for a user
-    public String generateToken(String email) {
+    public String generateToken(String username) {
         return Jwts.builder()
-                .subject(email)
+                .subject(username)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey())
                 .compact();
     }
 
-    // Extract email from token
+    // Extract username from token
     public String extractEmail(String token) {
         return getClaims(token).getSubject();
     }

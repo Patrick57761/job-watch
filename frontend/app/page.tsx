@@ -7,7 +7,7 @@ import { login, register } from "@/lib/api";
 export default function AuthPage() {
   const router = useRouter();
   const [mode, setMode] = useState<"login" | "register">("login");
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ export default function AuthPage() {
 
     try {
       const fn = mode === "login" ? login : register;
-      const { token } = await fn(email, password);
+      const { token } = await fn(username, password);
       localStorage.setItem("token", token);
       router.push("/jobs");
     } catch (err: unknown) {
@@ -71,18 +71,21 @@ export default function AuthPage() {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+                Username
               </label>
               <input
-                id="email"
-                type="email"
+                id="username"
+                type="text"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="yourname"
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
+              {mode === "register" && (
+                <p className="text-xs text-gray-400 mt-1">At least 3 characters, no spaces.</p>
+              )}
             </div>
 
             <div>

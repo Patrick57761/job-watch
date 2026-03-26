@@ -23,31 +23,34 @@ public class AuthService {
         this.jwtUtil = jwtUtil;
     }
 
-    public AuthResponseDTO register(String email, String password) {
-        if (userRepository.existsByEmail(email)) {
-            throw new RuntimeException("An account with that email already exists.");
+    public AuthResponseDTO register(String username, String password) {
+        if (username == null || username.contains(" ") || username.length() < 3) {
+            throw new RuntimeException("Username must be at least 3 characters and contain no spaces.");
+        }
+        if (userRepository.existsByUsername(username)) {
+            throw new RuntimeException("That username is already taken.");
         }
 
         String hashedPassword = passwordEncoder.encode(password);
 
         User user = new User();
-        user.setEmail(email);
+        user.setUsername(username);
         user.setPassword(hashedPassword);
         userRepository.save(user);
 
-        String token = jwtUtil.generateToken(email);
+        String token = jwtUtil.generateToken(username);
         return new AuthResponseDTO(token, DtoMapper.toUserDTO(user));
     }
 
-    public AuthResponseDTO login(String email, String password) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("No account found with that email."));
+    public AuthResponseDTO login(String username, String password) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("No account found with that username."));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Incorrect password.");
         }
 
-        String token = jwtUtil.generateToken(email);
+        String token = jwtUtil.generateToken(username);
         return new AuthResponseDTO(token, DtoMapper.toUserDTO(user));
     }
 }

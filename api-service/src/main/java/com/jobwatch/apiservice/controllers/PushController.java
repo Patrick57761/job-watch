@@ -35,7 +35,7 @@ public class PushController {
     @PostMapping("/subscribe")
     public ResponseEntity<?> subscribe(@RequestBody SubscribeRequest request,
                                        Authentication authentication) {
-        User user = userRepository.findByEmail(authentication.getName())
+        User user = userRepository.findByUsername(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (pushSubscriptionRepository.existsByUserAndEndpoint(user, request.endpoint())) {
@@ -63,7 +63,7 @@ public class PushController {
 
         List<SubscriptionResponse> subscriptions = watchers.stream()
                 .flatMap(w -> pushSubscriptionRepository.findByUser(w.getUser()).stream()
-                        .map(s -> new SubscriptionResponse(s.getEndpoint(), s.getP256dh(), s.getAuth(), w.getUser().getEmail())))
+                        .map(s -> new SubscriptionResponse(s.getEndpoint(), s.getP256dh(), s.getAuth(), w.getUser().getUsername())))
                 .toList();
 
         return ResponseEntity.ok(subscriptions);

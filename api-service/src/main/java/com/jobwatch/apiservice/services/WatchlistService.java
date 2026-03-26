@@ -30,14 +30,14 @@ public class WatchlistService {
 
     // Get all companies in watchlist
     public List<Watchlist> getWatchlist(String email) {
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByUsername(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return watchlistRepository.findByUser(user);
     }
 
     // Add a company to watchlist
     public Watchlist addToWatchlist(String email, Long companyId) {
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByUsername(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Company company = companyRepository.findById(companyId)
@@ -55,7 +55,7 @@ public class WatchlistService {
 
     // Remove a company from watchlist
     public void removeFromWatchlist(String email, Long companyId) {
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByUsername(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Company company = companyRepository.findById(companyId)

@@ -28,7 +28,7 @@ public class PreferencesController {
     // User fetches their own preferences
     @GetMapping("/api/preferences")
     public ResponseEntity<PreferencesResponse> getPreferences(Authentication authentication) {
-        User user = userRepository.findByEmail(authentication.getName())
+        User user = userRepository.findByUsername(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return preferencesRepository.findByUser(user)
@@ -42,7 +42,7 @@ public class PreferencesController {
             @RequestBody PreferencesRequest request,
             Authentication authentication) {
 
-        User user = userRepository.findByEmail(authentication.getName())
+        User user = userRepository.findByUsername(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         UserPreferences prefs = preferencesRepository.findByUser(user)
@@ -58,7 +58,7 @@ public class PreferencesController {
     // Internal — notification-service checks a user's preferences by email
     @GetMapping("/internal/preferences")
     public ResponseEntity<PreferencesResponse> getPreferencesInternal(@RequestParam String email) {
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByUsername(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return preferencesRepository.findByUser(user)

@@ -18,16 +18,16 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDTO> register(@RequestBody Map<String, String> request) {
-        String email = request.get("email");
+        String username = request.get("username");
         String password = request.get("password");
-        return ResponseEntity.ok(authService.register(email, password));
+        return ResponseEntity.ok(authService.register(username, password));
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody Map<String, String> request) {
-        String email = request.get("email");
+        String username = request.get("username");
         String password = request.get("password");
-        return ResponseEntity.ok(authService.login(email, password));
+        return ResponseEntity.ok(authService.login(username, password));
     }
 
     @ExceptionHandler(RuntimeException.class)

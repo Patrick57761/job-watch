@@ -4,7 +4,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
 
 export type User = {
   id: number;
-  email: string;
+  username: string;
 };
 
 export type Company = {
@@ -57,25 +57,25 @@ async function handleResponse<T>(res: Response): Promise<T> {
 // ─── Auth ─────────────────────────────────────────────────────────────────────
 
 export async function register(
-  email: string,
+  username: string,
   password: string
 ): Promise<{ token: string; user: User }> {
   const res = await fetch(`${BASE_URL}/api/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ username, password }),
   });
   return handleResponse(res);
 }
 
 export async function login(
-  email: string,
+  username: string,
   password: string
 ): Promise<{ token: string; user: User }> {
   const res = await fetch(`${BASE_URL}/api/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ username, password }),
   });
   return handleResponse(res);
 }

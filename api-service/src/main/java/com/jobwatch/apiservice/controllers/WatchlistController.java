@@ -23,7 +23,7 @@ public class WatchlistController {
 
     @GetMapping
     public ResponseEntity<List<WatchlistDTO>> getWatchlist() {
-        String email = getEmail();
+        String email = getUsername();
         List<WatchlistDTO> watchlist = watchlistService.getWatchlist(email)
                 .stream()
                 .map(DtoMapper::toWatchlistDTO)
@@ -33,7 +33,7 @@ public class WatchlistController {
 
     @PostMapping
     public ResponseEntity<WatchlistDTO> addToWatchlist(@RequestBody Map<String, Long> request) {
-        String email = getEmail();
+        String email = getUsername();
         Long companyId = request.get("company_id");
         return ResponseEntity.ok(
                 DtoMapper.toWatchlistDTO(watchlistService.addToWatchlist(email, companyId))
@@ -42,7 +42,7 @@ public class WatchlistController {
 
     @DeleteMapping("/{companyId}")
     public ResponseEntity<?> removeFromWatchlist(@PathVariable Long companyId) {
-        String email = getEmail();
+        String email = getUsername();
         watchlistService.removeFromWatchlist(email, companyId);
         return ResponseEntity.ok(Map.of("message", "Removed from watchlist"));
     }
@@ -52,7 +52,7 @@ public class WatchlistController {
         return ResponseEntity.ok(watchlistService.searchCompanies(q));
     }
 
-    private String getEmail() {
+    private String getUsername() {
         return SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal()
