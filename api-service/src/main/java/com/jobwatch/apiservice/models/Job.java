@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 @NoArgsConstructor
@@ -30,7 +31,7 @@ public class Job {
     private String url;
 
     @Column(name = "updated_at")
-    private String updatedAt;
+    private OffsetDateTime updatedAt;
 
     @Column(nullable = false)
     private String platform;

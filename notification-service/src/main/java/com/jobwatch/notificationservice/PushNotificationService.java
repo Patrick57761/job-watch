@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.martijndwars.webpush.Notification;
 import nl.martijndwars.webpush.PushService;
 import nl.martijndwars.webpush.Subscription;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -14,6 +16,8 @@ import java.util.Collection;
 
 @Service
 public class PushNotificationService {
+
+    private static final Logger log = LoggerFactory.getLogger(PushNotificationService.class);
 
     private final PushService pushService;
     private final RestTemplate restTemplate;
@@ -33,6 +37,7 @@ public class PushNotificationService {
         String url = apiBaseUrl + "/api/push/internal/subscriptions?companySlug=" + companySlug;
 
         List<Map> subscriptions = restTemplate.getForObject(url, List.class);
+        log.info("Notifying for company {}: {} subscribers found", companySlug, subscriptions == null ? 0 : subscriptions.size());
         if (subscriptions == null || subscriptions.isEmpty()) return;
 
         String payload;
@@ -62,9 +67,9 @@ public class PushNotificationService {
                         new Subscription.Keys(p256dh, auth));
                 Notification notification = new Notification(subscription, payload);
                 pushService.send(notification);
+                log.info("Push sent successfully to {}", endpoint);
             } catch (Exception e) {
-                System.err.println("Failed to send push to subscription: " + e.getClass().getName() + ": " + e.getMessage());
-                e.printStackTrace();
+                log.error("Failed to send push to {}: {}: {}", endpoint, e.getClass().getName(), e.getMessage(), e);
             }
         }
     }

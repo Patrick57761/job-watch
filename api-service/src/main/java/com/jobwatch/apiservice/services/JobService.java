@@ -7,6 +7,7 @@ import com.jobwatch.apiservice.repositories.CompanyRepository;
 import com.jobwatch.apiservice.repositories.JobRepository;
 import com.jobwatch.apiservice.repositories.UserRepository;
 import org.springframework.stereotype.Service;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Collection;
 
@@ -45,7 +46,7 @@ public class JobService {
         job.setTitle(title);
         job.setLocation(location);
         job.setUrl(url);
-        job.setUpdatedAt(updatedAt);
+        job.setUpdatedAt(updatedAt != null ? OffsetDateTime.parse(updatedAt) : null);
         job.setPlatform(platform);
         job.setCompany(company);
         job.setCategory(JobClassifier.classifyCategory(title));
