@@ -67,7 +67,9 @@ public class PushNotificationService {
                         new Subscription.Keys(p256dh, auth));
                 Notification notification = new Notification(subscription, payload);
                 org.apache.http.HttpResponse response = pushService.send(notification);
-                log.info("Push response: {} for endpoint {}", response.getStatusLine().getStatusCode(), endpoint);
+                int statusCode = response.getStatusLine().getStatusCode();
+                String body = new String(response.getEntity().getContent().readAllBytes());
+                log.info("Push response: {} body: {} for endpoint {}", statusCode, body, endpoint);
             } catch (Exception e) {
                 log.error("Failed to send push to {}: {}: {}", endpoint, e.getClass().getName(), e.getMessage(), e);
             }

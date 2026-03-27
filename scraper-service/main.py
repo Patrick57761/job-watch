@@ -32,6 +32,13 @@ def fetch_companies():
         logging.error(f"Failed to fetch companies: {e}")
         return []
 
+def has_subscribers(slug: str) -> bool:
+    try:
+        response = requests.get(f"{API_BASE_URL}/api/push/internal/subscriptions?companySlug={slug}", timeout=5)
+        return len(response.json()) > 0
+    except Exception:
+        return True  # if check fails, default to scraping
+
 def ingest_job(job: dict, category: str, seniority: str):
     try:
         response = requests.post(
@@ -74,6 +81,9 @@ def notify_new_job(company_slug: str, company_name: str, company_logo: str, job_
 def scrape_all():
     for company in fetch_companies():
         slug = company["slug"]
+        if not has_subscribers(slug):
+            logging.info(f"Skipping {slug} — no subscribers")
+            continue
         platform = company["platform"]
         company_name = company.get("name", slug)
         company_logo = company.get("logoUrl", "")
