@@ -15,13 +15,13 @@ public class JobClassifier {
             return "product";
         }
         if (t.contains("engineer") || t.contains("developer") || t.contains("software") ||
-            t.contains("data") || t.contains("machine learning") || t.contains("ml") ||
-            t.contains("ai ") || t.contains("artificial intelligence") ||
+            t.contains("data") || t.contains("machine learning") || t.contains("computer vision") ||
+            hasWord(t, "ml") || hasWord(t, "ai") || t.contains("artificial intelligence") ||
             t.contains("infrastructure") || t.contains("security") || t.contains("devops") ||
             t.contains("sre") || t.contains("backend") || t.contains("frontend") ||
             t.contains("fullstack") || t.contains("full stack") || t.contains("scientist") ||
-            t.contains("analyst") || t.contains("research") || t.contains("qa") ||
-            t.contains("test") || t.contains("mobile") || t.contains("ios") ||
+            t.contains("analyst") || t.contains("research") || t.contains("r&d") ||
+            t.contains("qa") || t.contains("test") || t.contains("mobile") || t.contains("ios") ||
             t.contains("android") || t.contains("cloud") || t.contains("platform") ||
             t.contains("systems") || t.contains("network") || t.contains("database")) {
             return "technical";
