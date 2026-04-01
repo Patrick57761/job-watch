@@ -23,26 +23,20 @@ public interface JobRepository extends JpaRepository<Job, Long> {
            "AND (:#{#categories == null || #categories.isEmpty()} = true OR j.category IN :categories) " +
            "AND (:#{#seniorities == null || #seniorities.isEmpty()} = true OR j.seniority IN :seniorities) " +
            "AND (:usOnly = false OR (j.location IS NULL OR " +
-               "(LOWER(j.location) NOT LIKE '%canada%' AND LOWER(j.location) NOT LIKE '%ontario%' AND LOWER(j.location) NOT LIKE '%toronto%' AND LOWER(j.location) NOT LIKE '%vancouver%' AND LOWER(j.location) NOT LIKE '%montreal%' AND " +
-               "LOWER(j.location) NOT LIKE '%poland%' AND LOWER(j.location) NOT LIKE '%germany%' AND LOWER(j.location) NOT LIKE '%france%' AND LOWER(j.location) NOT LIKE '%uk%' AND LOWER(j.location) NOT LIKE '%london%' AND LOWER(j.location) NOT LIKE '%ireland%' AND LOWER(j.location) NOT LIKE '%india%' AND LOWER(j.location) NOT LIKE '%singapore%' AND LOWER(j.location) NOT LIKE '%australia%' AND LOWER(j.location) NOT LIKE '%brazil%' AND " +
-               "(LOWER(j.location) LIKE '%united states%' OR " +
-               "LOWER(j.location) LIKE '%usa%' OR " +
-               "LOWER(j.location) LIKE '%remote - us%' OR " +
-               "LOWER(j.location) LIKE '%us remote%' OR " +
-               "LOWER(j.location) LIKE '%remote, us%' OR " +
-               "LOWER(j.location) LIKE '%, ca' OR " +
-               "LOWER(j.location) LIKE '%, ny' OR " +
-               "LOWER(j.location) LIKE '%, wa' OR " +
-               "LOWER(j.location) LIKE '%, tx' OR " +
-               "LOWER(j.location) LIKE '%, ma' OR " +
-               "LOWER(j.location) LIKE '%, co' OR " +
-               "LOWER(j.location) LIKE '%, il' OR " +
-               "LOWER(j.location) LIKE '%san francisco%' OR " +
-               "LOWER(j.location) LIKE '%new york%' OR " +
-               "LOWER(j.location) LIKE '%seattle%' OR " +
-               "LOWER(j.location) LIKE '%austin%' OR " +
-               "LOWER(j.location) LIKE '%chicago%' OR " +
-               "LOWER(j.location) LIKE '%boston%')))) " +
+               "(LOWER(j.location) LIKE '%united states%' OR LOWER(j.location) LIKE '%usa%' OR " +
+               "LOWER(j.location) LIKE '%alabama%' OR LOWER(j.location) LIKE '%alaska%' OR LOWER(j.location) LIKE '%arizona%' OR LOWER(j.location) LIKE '%arkansas%' OR " +
+               "LOWER(j.location) LIKE '%california%' OR LOWER(j.location) LIKE '%colorado%' OR LOWER(j.location) LIKE '%connecticut%' OR LOWER(j.location) LIKE '%delaware%' OR " +
+               "LOWER(j.location) LIKE '%florida%' OR LOWER(j.location) LIKE '%georgia%' OR LOWER(j.location) LIKE '%hawaii%' OR LOWER(j.location) LIKE '%idaho%' OR " +
+               "LOWER(j.location) LIKE '%illinois%' OR LOWER(j.location) LIKE '%indiana%' OR LOWER(j.location) LIKE '%iowa%' OR LOWER(j.location) LIKE '%kansas%' OR " +
+               "LOWER(j.location) LIKE '%kentucky%' OR LOWER(j.location) LIKE '%louisiana%' OR LOWER(j.location) LIKE '%maine%' OR LOWER(j.location) LIKE '%maryland%' OR " +
+               "LOWER(j.location) LIKE '%massachusetts%' OR LOWER(j.location) LIKE '%michigan%' OR LOWER(j.location) LIKE '%minnesota%' OR LOWER(j.location) LIKE '%mississippi%' OR " +
+               "LOWER(j.location) LIKE '%missouri%' OR LOWER(j.location) LIKE '%montana%' OR LOWER(j.location) LIKE '%nebraska%' OR LOWER(j.location) LIKE '%nevada%' OR " +
+               "LOWER(j.location) LIKE '%new hampshire%' OR LOWER(j.location) LIKE '%new jersey%' OR LOWER(j.location) LIKE '%new mexico%' OR LOWER(j.location) LIKE '%new york%' OR " +
+               "LOWER(j.location) LIKE '%north carolina%' OR LOWER(j.location) LIKE '%north dakota%' OR LOWER(j.location) LIKE '%ohio%' OR LOWER(j.location) LIKE '%oklahoma%' OR " +
+               "LOWER(j.location) LIKE '%oregon%' OR LOWER(j.location) LIKE '%pennsylvania%' OR LOWER(j.location) LIKE '%rhode island%' OR LOWER(j.location) LIKE '%south carolina%' OR " +
+               "LOWER(j.location) LIKE '%south dakota%' OR LOWER(j.location) LIKE '%tennessee%' OR LOWER(j.location) LIKE '%texas%' OR LOWER(j.location) LIKE '%utah%' OR " +
+               "LOWER(j.location) LIKE '%vermont%' OR LOWER(j.location) LIKE '%virginia%' OR LOWER(j.location) LIKE '%washington%' OR LOWER(j.location) LIKE '%west virginia%' OR " +
+               "LOWER(j.location) LIKE '%wisconsin%' OR LOWER(j.location) LIKE '%wyoming%' OR LOWER(j.location) LIKE '%district of columbia%' OR LOWER(j.location) LIKE '%remote%'))) " +
            "ORDER BY j.updatedAt DESC")
     List<Job> findJobsForWatchlistFiltered(@Param("user") User user,
                                            @Param("categories") Collection<String> categories,
