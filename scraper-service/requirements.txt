@@ -3,3 +3,4 @@ kafka-python==2.3.0
 redis==7.3.0
 python-dotenv==1.2.2
 openai==1.75.0
+schedule==1.2.2
