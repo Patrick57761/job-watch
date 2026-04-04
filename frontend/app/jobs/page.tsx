@@ -55,24 +55,24 @@ function Dropdown({ values, onChange, options, placeholder }: {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className={`flex items-center gap-1.5 text-xs font-medium border rounded-full px-3 py-1.5 bg-white focus:outline-none transition-colors ${active ? "border-gray-400 text-gray-800" : "border-gray-200 text-gray-500 hover:border-gray-400"}`}
+        className={`flex items-center gap-1.5 text-xs font-medium border rounded-full px-3 py-1.5 bg-white dark:bg-gray-800 focus:outline-none transition-colors ${active ? "border-gray-400 dark:border-gray-500 text-gray-800 dark:text-gray-100" : "border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500"}`}
       >
         {label}
-        <svg className="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+        <svg className="w-3 h-3 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
         </svg>
       </button>
       {open && (
-        <div className="absolute top-full mt-1 left-0 z-20 bg-white border border-gray-200 rounded-xl shadow-md py-1 min-w-[148px]">
+        <div className="absolute top-full mt-1 left-0 z-20 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-md py-1 min-w-[148px]">
           {options.map((o) => {
             const selected = values.includes(o.value);
             return (
               <button
                 key={o.value}
                 onClick={() => toggle(o.value)}
-                className={`w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50 transition-colors flex items-center gap-2 ${selected ? "text-blue-600 font-semibold" : "text-gray-700"}`}
+                className={`w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-2 ${selected ? "text-blue-500 font-semibold" : "text-gray-700 dark:text-gray-300"}`}
               >
-                <span className={`w-3 h-3 rounded-sm border flex items-center justify-center shrink-0 ${selected ? "bg-blue-600 border-blue-600" : "border-gray-300"}`}>
+                <span className={`w-3 h-3 rounded-sm border flex items-center justify-center shrink-0 ${selected ? "bg-blue-600 border-blue-600" : "border-gray-300 dark:border-gray-600"}`}>
                   {selected && <svg className="w-2 h-2 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
                 </span>
                 {o.label}
@@ -103,7 +103,7 @@ function JobCard({ job }: { job: Job }) {
       href={job.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="block bg-white border border-gray-200 rounded-lg px-4 py-2.5 hover:border-gray-300 hover:shadow-md transition-all"
+      className="block bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg px-4 py-2.5 hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-md transition-all"
     >
       <div className="flex items-center gap-3">
         <div className="shrink-0 w-7 h-7 flex items-center justify-center">
@@ -115,21 +115,21 @@ function JobCard({ job }: { job: Job }) {
               onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
             />
           ) : (
-            <div className="w-7 h-7 rounded bg-gray-100" />
+            <div className="w-7 h-7 rounded bg-gray-100 dark:bg-gray-800" />
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-medium text-gray-900 leading-snug line-clamp-2">{job.title}</p>
-          <p className="text-[11px] text-gray-400 mt-0.5">{job.company.name}</p>
+          <p className="text-sm font-medium text-gray-900 dark:text-gray-100 leading-snug line-clamp-2">{job.title}</p>
+          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{job.company.name}</p>
         </div>
         <div className="shrink-0 text-right space-y-0.5">
-          <p className="text-[11px] text-gray-400">{timeAgo(job.updatedAt || job.createdAt)}</p>
+          <p className="text-[11px] text-gray-400 dark:text-gray-500">{timeAgo(job.updatedAt || job.createdAt)}</p>
           {job.location && (() => {
             const locs = job.location.split("; ");
             const display = locs.length > 3
               ? locs.slice(0, 2).join("; ") + `; +${locs.length - 2} more`
               : job.location;
-            return <p className="text-[11px] text-gray-400">{display}</p>;
+            return <p className="text-[11px] text-gray-400 dark:text-gray-500">{display}</p>;
           })()}
         </div>
       </div>
@@ -174,14 +174,14 @@ function WatchlistCard({
 
   return (
     <div
-      className={`flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-gray-50 select-none transition-colors cursor-pointer ${isDragOver ? "border-t-2 border-blue-400" : ""} ${selected ? "bg-blue-50" : ""}`}
+      className={`flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 select-none transition-colors cursor-pointer ${isDragOver ? "border-t-2 border-blue-400" : ""} ${selected ? "bg-blue-50 dark:bg-blue-950" : ""}`}
       onClick={handleClick}
       draggable={!selectMode}
       onDragStart={onDragStart}
       onDragOver={onDragOver}
       onDrop={onDrop}
     >
-      <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${selected ? "bg-blue-600 border-blue-600" : "border-gray-300 bg-white"} ${selectMode ? "" : "invisible"}`}>
+      <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${selected ? "bg-blue-600 border-blue-600" : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900"} ${selectMode ? "" : "invisible"}`}>
         {selected && (
           <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -196,17 +196,52 @@ function WatchlistCard({
           onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
         />
       ) : (
-        <div className="w-5 h-5 rounded bg-gray-100 shrink-0" />
+        <div className="w-5 h-5 rounded bg-gray-100 dark:bg-gray-800 shrink-0" />
       )}
-      <p className={`text-xs flex-1 truncate ${muted ? "text-gray-400" : "text-gray-700"}`}>
+      <p className={`text-xs flex-1 truncate ${muted ? "text-gray-400 dark:text-gray-600" : "text-gray-700 dark:text-gray-300"}`}>
         {entry.company.name}
       </p>
       {jobCount > 0 && (
-        <span className={`text-[10px] font-medium shrink-0 px-1.5 py-0.5 rounded-full ${muted ? "bg-gray-50 text-gray-300" : "bg-gray-100 text-gray-500"}`}>
+        <span className={`text-[10px] font-medium shrink-0 px-1.5 py-0.5 rounded-full ${muted ? "bg-gray-50 dark:bg-gray-800 text-gray-300 dark:text-gray-600" : "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"}`}>
           {jobCount}
         </span>
       )}
     </div>
+  );
+}
+
+function DarkModeToggle() {
+  const [dark, setDark] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem("theme") === "dark";
+  });
+
+  function toggle() {
+    const next = !dark;
+    setDark(next);
+    localStorage.setItem("theme", next ? "dark" : "light");
+    document.documentElement.classList.toggle("dark", next);
+  }
+
+  return (
+    <button
+      onClick={toggle}
+      className={`relative flex items-center w-12 h-6 rounded-full transition-colors shrink-0 ${dark ? "bg-gray-700" : "bg-gray-200"}`}
+      aria-label="Toggle dark mode"
+    >
+      <span className={`absolute flex items-center justify-center w-5 h-5 rounded-full bg-white shadow transition-transform ${dark ? "translate-x-6" : "translate-x-0.5"}`}>
+        {dark ? (
+          <svg className="w-3 h-3 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" />
+          </svg>
+        ) : (
+          <svg className="w-3 h-3 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <circle cx="12" cy="12" r="4" />
+            <path strokeLinecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+          </svg>
+        )}
+      </span>
+    </button>
   );
 }
 
@@ -487,11 +522,11 @@ export default function JobsPage() {
   const visibleJobs = showAll ? filteredJobs : filteredJobs.slice(0, 10);
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 py-3 flex items-center gap-4">
-          <h1 className="text-base font-semibold text-gray-900 shrink-0">JobWatch</h1>
+          <h1 className="text-base font-semibold text-gray-900 dark:text-gray-100 shrink-0">JobWatch</h1>
           <div className="flex items-center gap-2 flex-1">
             <Dropdown
               values={categories}
@@ -521,7 +556,7 @@ export default function JobsPage() {
             />
             <button
               onClick={() => setUsOnly(!usOnly)}
-              className={`text-xs font-medium px-3 py-1.5 rounded-full border transition-colors ${usOnly ? "bg-gray-900 text-white border-gray-900" : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"}`}
+              className={`text-xs font-medium px-3 py-1.5 rounded-full border transition-colors ${usOnly ? "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-gray-900 dark:border-gray-100" : "bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500"}`}
             >
               🇺🇸 US only
             </button>
@@ -532,13 +567,14 @@ export default function JobsPage() {
                 Notifications on
               </button>
             ) : (
-              <button onClick={handleEnableNotifications} disabled={notifStatus === "loading" || notifStatus === "denied"} className="text-xs text-gray-400 hover:text-gray-600 disabled:opacity-50 transition-colors">
+              <button onClick={handleEnableNotifications} disabled={notifStatus === "loading" || notifStatus === "denied"} className="text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 disabled:opacity-50 transition-colors">
                 {notifStatus === "loading" ? "Enabling…" : notifStatus === "denied" ? "Blocked" : "Enable notifications"}
               </button>
             )}
-            <button onClick={handleLogout} className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
+            <button onClick={handleLogout} className="text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
               Log out
             </button>
+            <DarkModeToggle />
           </div>
         </div>
       </header>
@@ -547,7 +583,7 @@ export default function JobsPage() {
         {/* Job count */}
         <div className="max-w-2xl mb-3 min-h-[1.25rem]">
           {!jobsLoading && !jobsError && filteredJobs.length > 0 && (
-            <p className="text-xs text-gray-400">{filteredJobs.length} {filteredJobs.length === 1 ? "job" : "jobs"} from your watchlist</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500">{filteredJobs.length} {filteredJobs.length === 1 ? "job" : "jobs"} from your watchlist</p>
           )}
         </div>
 
@@ -557,14 +593,14 @@ export default function JobsPage() {
         <div className="flex-1 min-w-0 max-w-2xl">
 
           {/* States */}
-          {jobsLoading && <p className="text-center text-gray-400 text-xs py-16">Loading jobs…</p>}
+          {jobsLoading && <p className="text-center text-gray-400 dark:text-gray-500 text-xs py-16">Loading jobs…</p>}
           {!jobsLoading && jobsError && (
-            <div className="bg-red-50 border border-red-200 rounded-xl px-5 py-4 text-xs text-red-700">{jobsError}</div>
+            <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-900 rounded-xl px-5 py-4 text-xs text-red-700 dark:text-red-400">{jobsError}</div>
           )}
           {!jobsLoading && !jobsError && filteredJobs.length === 0 && (
-            <div className="text-center py-20 text-gray-400">
-              <p className="text-sm font-medium text-gray-500 mb-1">No jobs yet</p>
-              <p className="text-xs text-gray-400">Add companies to your watchlist and check back soon.</p>
+            <div className="text-center py-20">
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">No jobs yet</p>
+              <p className="text-xs text-gray-400 dark:text-gray-500">Add companies to your watchlist and check back soon.</p>
             </div>
           )}
 
@@ -573,7 +609,7 @@ export default function JobsPage() {
             <div className="space-y-1.5">
               {visibleJobs.map((job) => <JobCard key={job.id} job={job} />)}
               {filteredJobs.length > 10 && (
-                <button onClick={() => setShowAll(!showAll)} className="w-full text-xs text-gray-400 hover:text-gray-600 py-3 border border-gray-200 rounded-xl bg-white hover:bg-gray-50 transition-colors">
+                <button onClick={() => setShowAll(!showAll)} className="w-full text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 py-3 border border-gray-200 dark:border-gray-800 rounded-xl bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                   {showAll ? "Show less" : `See ${filteredJobs.length - 10} more`}
                 </button>
               )}
@@ -583,9 +619,9 @@ export default function JobsPage() {
 
         {/* ── Right: Watchlist panel ──────────────────────────────────────── */}
         <div className="w-60 shrink-0 sticky top-16">
-          <div className="bg-white border border-gray-200 rounded-xl p-3">
+          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-3">
             <div className="flex items-center justify-between mb-3 px-1">
-              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Watchlist</p>
+              <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Watchlist</p>
             </div>
 
             {/* Search */}
@@ -594,7 +630,7 @@ export default function JobsPage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Add a company…"
-              className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-gray-400 mb-2 placeholder:text-gray-400"
+              className="w-full px-3 py-1.5 border border-gray-200 dark:border-gray-700 rounded-lg text-xs focus:outline-none focus:border-gray-400 dark:focus:border-gray-500 mb-2 placeholder:text-gray-400 dark:placeholder:text-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             />
 
             {/* Select all + bulk actions */}
@@ -605,39 +641,39 @@ export default function JobsPage() {
                     onClick={toggleSelectAll}
                     className="flex items-center gap-2 text-left"
                   >
-                    <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${allSelected ? "bg-blue-600 border-blue-600" : "border-gray-300 bg-white"}`}>
+                    <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${allSelected ? "bg-blue-600 border-blue-600" : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900"}`}>
                       {allSelected && (
                         <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
                       )}
                     </span>
-                    <span className="text-[11px] text-gray-600">Select all</span>
+                    <span className="text-[11px] text-gray-600 dark:text-gray-400">Select all</span>
                   </button>
                   <button
                     onClick={toggleSelectMode}
-                    className="text-[11px] text-gray-400 hover:text-gray-600 transition-colors"
+                    className="text-[11px] text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                   >
                     Cancel
                   </button>
                 </div>
 
                 {selectedIds.size > 0 && (
-                  <div className="flex gap-2 px-1 pt-1 border-t border-gray-100">
+                  <div className="flex gap-2 px-1 pt-1 border-t border-gray-100 dark:border-gray-800">
                     <button
                       onClick={handleBulkHide}
-                      className="text-[11px] text-gray-600 hover:text-gray-900 transition-colors"
+                      className="text-[11px] text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
                     >
                       Hide jobs
                     </button>
-                    <span className="text-gray-200">|</span>
+                    <span className="text-gray-200 dark:text-gray-700">|</span>
                     <button
                       onClick={handleBulkShow}
-                      className="text-[11px] text-gray-600 hover:text-gray-900 transition-colors"
+                      className="text-[11px] text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
                     >
                       Show jobs
                     </button>
-                    <span className="text-gray-200">|</span>
+                    <span className="text-gray-200 dark:text-gray-700">|</span>
                     <button
                       onClick={handleBulkRemove}
                       className="text-[11px] text-red-500 hover:text-red-700 transition-colors"
@@ -650,35 +686,35 @@ export default function JobsPage() {
             )}
 
             {/* Search results */}
-            {searchLoading && <p className="text-[11px] text-gray-400 px-1 mb-2">Searching…</p>}
+            {searchLoading && <p className="text-[11px] text-gray-400 dark:text-gray-500 px-1 mb-2">Searching…</p>}
             {!searchLoading && searchResults.length > 0 && (
-              <div className="border border-gray-100 rounded-lg mb-2 overflow-hidden">
+              <div className="border border-gray-100 dark:border-gray-800 rounded-lg mb-2 overflow-hidden">
                 {searchResults.map((company) => (
                   <button
                     key={company.id}
                     onClick={() => !watchlistedIds.has(company.id) && handleAdd(company)}
                     disabled={watchlistedIds.has(company.id) || actionLoading === company.id}
-                    className="w-full flex items-center gap-2 px-3 py-1.5 text-left hover:bg-gray-50 disabled:opacity-50"
+                    className="w-full flex items-center gap-2 px-3 py-1.5 text-left hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50"
                   >
                     {company.logoUrl ? (
                       <img src={company.logoUrl} alt={company.name} className="w-5 h-5 rounded object-contain shrink-0" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                     ) : (
-                      <div className="w-5 h-5 rounded bg-gray-100 shrink-0" />
+                      <div className="w-5 h-5 rounded bg-gray-100 dark:bg-gray-800 shrink-0" />
                     )}
-                    <span className="truncate text-xs text-gray-700">{company.name}</span>
-                    {watchlistedIds.has(company.id) && <span className="ml-auto text-[10px] text-gray-400">Added</span>}
+                    <span className="truncate text-xs text-gray-700 dark:text-gray-300">{company.name}</span>
+                    {watchlistedIds.has(company.id) && <span className="ml-auto text-[10px] text-gray-400 dark:text-gray-500">Added</span>}
                   </button>
                 ))}
               </div>
             )}
             {!searchLoading && query.trim() && searchResults.length === 0 && (
-              <p className="text-[11px] text-gray-400 px-1 mb-2">Not found — try exact slug (e.g. "figma")</p>
+              <p className="text-[11px] text-gray-400 dark:text-gray-500 px-1 mb-2">Not found — try exact slug (e.g. "figma")</p>
             )}
 
             {/* Watchlist companies */}
             <div className="space-y-0.5">
               {watchlist.length === 0 && !query && (
-                <p className="text-[11px] text-gray-400 px-2 py-2">No companies yet.</p>
+                <p className="text-[11px] text-gray-400 dark:text-gray-500 px-2 py-2">No companies yet.</p>
               )}
               {watchlist.map((entry, index) => (
                 <WatchlistCard

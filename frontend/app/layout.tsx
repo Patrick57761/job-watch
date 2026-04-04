@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ThemeProvider from "./components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "JobWatch",
@@ -13,7 +14,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-gray-50 text-gray-900 antialiased">{children}</body>
+      <body className="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
+        <ThemeProvider />
+        {children}
+      </body>
     </html>
   );
 }
