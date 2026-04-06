@@ -519,6 +519,19 @@ export default function JobsPage() {
   }
   const visibleJobs = showAll ? filteredJobs : filteredJobs.slice(0, 10);
 
+  const jobsListRef = useRef<HTMLDivElement>(null);
+  const [panelHeight, setPanelHeight] = useState<number | null>(null);
+
+  useEffect(() => {
+    const el = jobsListRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(() => {
+      setPanelHeight(el.offsetHeight);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Header */}
@@ -604,7 +617,7 @@ export default function JobsPage() {
 
           {/* Job cards */}
           {!jobsLoading && !jobsError && filteredJobs.length > 0 && (
-            <div className="space-y-1.5">
+            <div ref={jobsListRef} className="space-y-1.5">
               {visibleJobs.map((job) => <JobCard key={job.id} job={job} />)}
               {filteredJobs.length > 10 && (
                 <button onClick={() => setShowAll(!showAll)} className="w-full text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 py-3 border border-gray-200 dark:border-gray-800 rounded-xl bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
@@ -616,8 +629,8 @@ export default function JobsPage() {
         </div>
 
         {/* ── Right: Watchlist panel ──────────────────────────────────────── */}
-        <div className="w-60 shrink-0 sticky top-16">
-          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-3 flex flex-col">
+        <div className="w-60 shrink-0 sticky top-16" style={panelHeight ? { height: `${panelHeight}px` } : {}}>
+          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-3 flex flex-col h-full">
             <div className="flex items-center justify-between mb-3 px-1">
               <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Watchlist</p>
             </div>
@@ -710,7 +723,7 @@ export default function JobsPage() {
             )}
 
             {/* Watchlist companies */}
-            <div className="space-y-0.5 overflow-y-auto" style={{ maxHeight: "338px" }}>
+            <div className="space-y-0.5 overflow-y-auto flex-1">
               {watchlist.length === 0 && !query && (
                 <p className="text-[11px] text-gray-400 dark:text-gray-500 px-2 py-2">No companies yet.</p>
               )}
