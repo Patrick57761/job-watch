@@ -548,7 +548,7 @@ export default function JobsPage() {
     <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Header */}
       <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-6 py-3 flex items-center gap-4">
+        <div className="max-w-[984px] mx-auto px-6 py-3 flex items-center gap-4">
           <h1 className="text-base font-semibold text-gray-900 dark:text-gray-100 shrink-0">JobWatch</h1>
           <div className="flex items-center gap-2 flex-1">
             <Dropdown
@@ -602,9 +602,9 @@ export default function JobsPage() {
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-6 pt-8 pb-8">
+      <div className="max-w-[984px] mx-auto px-6 pt-8 pb-8">
         {/* Job count */}
-        <div className="max-w-2xl mb-3 min-h-[1.25rem]">
+        <div className="mb-3 min-h-[1.25rem]" style={{ maxWidth: "calc(100% - 264px)" }}>
           {!jobsLoading && !jobsError && filteredJobs.length > 0 && (
             <p className="text-xs text-gray-400 dark:text-gray-500">{filteredJobs.length} {filteredJobs.length === 1 ? "job" : "jobs"} from your watchlist</p>
           )}
@@ -613,7 +613,7 @@ export default function JobsPage() {
         <div className="flex gap-6 items-start">
 
         {/* ── Left: Jobs feed ─────────────────────────────────────────────── */}
-        <div className="flex-1 min-w-0 max-w-2xl">
+        <div className="flex-1 min-w-0">
 
           {/* States */}
           {jobsLoading && <LoadingDots />}
