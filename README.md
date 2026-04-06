@@ -2,6 +2,8 @@
 
 Real-time job alert platform. Watchlist companies and get push notifications within 60 seconds of a new posting on Greenhouse, Lever, or Ashby.
 
+Many job boards and GitHub lists still surface postings that are weeks or months old—roles that are already closed or flooded with applicants. JobWatch pulls directly from company hiring APIs and alerts you the moment a role goes live, so you can always be the first to apply, or check if a posting is outdated. 
+
 **Live:** https://jobwatch.duckdns.org
 
 ---
@@ -24,12 +26,11 @@ job-watch/
 
 ## Features
 
-- Push notifications within 60 seconds of a new job posting, even when the browser tab is closed
+- Jobs feed includes all relevant roles with posting date
+- Shortlisted push notifications within 60 seconds of a new job posting
+- Filter by job category, seniority, and US-only; preferences are saved across sessions
 - Covers companies hiring on Greenhouse, Lever, or Ashby
-- Watchlist — add/remove companies, drag to reorder, mute individual companies
-- Jobs feed — browse all postings from your watched companies in one place
-- Filters — by job category, seniority level, and US-only; saved and restored across sessions
-- Notifications respect your filters — only get alerted for roles that match your preferences
+- Add/remove/mute companies from customized watchlist
 
 ---
 
