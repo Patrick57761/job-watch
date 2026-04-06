@@ -201,11 +201,9 @@ function WatchlistCard({
       <p className={`text-xs flex-1 truncate ${muted ? "text-gray-400 dark:text-gray-600" : "text-gray-700 dark:text-gray-300"}`}>
         {entry.company.name}
       </p>
-      {jobCount > 0 && (
-        <span className={`text-[10px] font-medium shrink-0 px-1.5 py-0.5 rounded-full ${muted ? "bg-gray-50 dark:bg-gray-800 text-gray-300 dark:text-gray-600" : "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"}`}>
-          {jobCount}
-        </span>
-      )}
+      <span className={`text-[10px] font-medium shrink-0 px-1.5 py-0.5 rounded-full ${muted ? "bg-gray-50 dark:bg-gray-800 text-gray-300 dark:text-gray-600" : "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"}`}>
+        {jobCount}
+      </span>
     </div>
   );
 }
@@ -619,7 +617,7 @@ export default function JobsPage() {
 
         {/* ── Right: Watchlist panel ──────────────────────────────────────── */}
         <div className="w-60 shrink-0 sticky top-16">
-          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-3">
+          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-3 flex flex-col">
             <div className="flex items-center justify-between mb-3 px-1">
               <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Watchlist</p>
             </div>
@@ -712,7 +710,7 @@ export default function JobsPage() {
             )}
 
             {/* Watchlist companies */}
-            <div className="space-y-0.5">
+            <div className="space-y-0.5 overflow-y-auto" style={{ maxHeight: "338px" }}>
               {watchlist.length === 0 && !query && (
                 <p className="text-[11px] text-gray-400 dark:text-gray-500 px-2 py-2">No companies yet.</p>
               )}
