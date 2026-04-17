@@ -46,6 +46,12 @@ public class Job {
     @Column
     private String seniority;
 
+    @Column(name = "is_us")
+    private boolean isUS;
+
+    @Column(name = "is_remote")
+    private boolean isRemote;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

@@ -40,7 +40,7 @@ def has_subscribers(slug: str) -> bool:
     except Exception:
         return True  # if check fails, default to scraping
 
-def ingest_job(job: dict, category: str, seniority: str):
+def ingest_job(job: dict, category: str, seniority: str, is_us: bool, is_remote: bool):
     try:
         response = requests.post(
             f"{API_BASE_URL}/internal/jobs",
@@ -54,6 +54,8 @@ def ingest_job(job: dict, category: str, seniority: str):
                 "companySlug": job["company_slug"],
                 "category": category,
                 "seniority": seniority,
+                "isUS": is_us,
+                "isRemote": is_remote,
             },
             timeout=5
         )
@@ -91,8 +93,8 @@ def scrape_company(company: dict):
         new_count = 0
         for job in jobs:
             if is_new_job(job["id"]):
-                classification = classify_job(job["title"])
-                ingest_job(job, classification["category"], classification["seniority"])
+                classification = classify_job(job["title"], job["location"])
+                ingest_job(job, classification["category"], classification["seniority"], classification["isUS"], classification["isRemote"])
                 notify_new_job(slug, company_name, company_logo, job["title"], job["url"], classification["category"], classification["seniority"])
                 new_count += 1
         logging.info(f"{slug}: {new_count} new jobs published out of {len(jobs)} total")

@@ -32,7 +32,8 @@ public class JobService {
     }
 
     public Job ingestJob(String externalId, String title, String location,
-                         String url, String updatedAt, String platform, String companySlug) {
+                         String url, String updatedAt, String platform, String companySlug,
+                         String category, String seniority, boolean isUS, boolean isRemote) {
 
         if (jobRepository.existsByExternalId(externalId)) {
             return null;
@@ -49,8 +50,10 @@ public class JobService {
         job.setUpdatedAt(updatedAt != null ? OffsetDateTime.parse(updatedAt) : null);
         job.setPlatform(platform);
         job.setCompany(company);
-        job.setCategory(JobClassifier.classifyCategory(title));
-        job.setSeniority(JobClassifier.classifySeniority(title));
+        job.setCategory(category);
+        job.setSeniority(seniority);
+        job.setUS(isUS);
+        job.setRemote(isRemote);
 
         return jobRepository.save(job);
     }

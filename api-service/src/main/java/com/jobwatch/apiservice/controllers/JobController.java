@@ -58,7 +58,11 @@ public class JobController {
                 request.url(),
                 request.updatedAt(),
                 request.platform(),
-                request.companySlug()
+                request.companySlug(),
+                request.category(),
+                request.seniority(),
+                request.isUS(),
+                request.isRemote()
         );
 
         if (job == null) {
@@ -75,6 +79,10 @@ public class JobController {
             String url,
             String updatedAt,
             String platform,
-            String companySlug
+            String companySlug,
+            String category,
+            String seniority,
+            boolean isUS,
+            boolean isRemote
     ) {}
 }
