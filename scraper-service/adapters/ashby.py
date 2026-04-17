@@ -26,7 +26,7 @@ def _resolve_location(job: dict) -> str:
     workplace = job.get("workplaceType", "")
     is_remote = job.get("isRemote")
 
-    address = job.get("address", {}).get("postalAddress", {})
+    address = (job.get("address") or {}).get("postalAddress") or {}
     city = address.get("addressLocality", "")
     region = address.get("addressRegion", "")
     country = address.get("addressCountry", "")
