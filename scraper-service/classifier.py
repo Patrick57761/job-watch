@@ -19,7 +19,7 @@ Guidelines for category:
 - other: anything that doesn't clearly fit
 
 Guidelines for seniority:
-- intern: intern, co-op, apprentice
+- intern: intern, co-op, apprentice, or any role with a season+year suffix like "(Summer 2026)", "(Fall 2025)", "(Spring 2026)" — NOTE: "internals" in a title (e.g. "Database Engine Internals") refers to a technical domain, not seniority
 - early career: new grad, associate, junior, level I, L3, E3
 - mid-level: no level indicator, level II, L4, E4, SWE without qualifier
 - experienced: senior, staff, principal, lead, manager, director, VP, L5+, E5+
